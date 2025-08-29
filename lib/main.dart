@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shopping_app/features/auth/presentation/views/sign_in_view.dart';
+import 'package:shopping_app/features/auth/presentation/views/sign_up_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,13 +15,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shopping App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.robotoTextTheme(),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Ready to start!'),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: SignInView.routeName,
+      routes: {
+        SignInView.routeName: (context) => const SignInView(),
+        SignUpView.routeName: (context) => const SignUpView(),
+      },
     );
   }
 }

@@ -1,0 +1,15 @@
+{
+  "login": "تسجيل الدخول",
+  "email": "البريد",
+  "hello_login": "مرحبًا ، سجل الدخول لمتابعة استخدام تطبيقنا",
+  "password": "كلمة المرور",
+  "Sign_in": "تسجيل الدخول",
+  "dont_have_account": "ليس لديك حساب؟",
+  "create_account": " إنشاء حساب",
+  "loading": "جار التحميل...",
+  "sign_up": "إنشاء حساب",
+  "create_a_new_account": "إنشاء حساب جديد",
+  "Confirm_Password": "تأكيد كلمة المرور",
+  "create": "اشتراك",
+  "already_have_an_account": "هل لديك بالفعل حساب؟ "
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_in_view.dart';
@@ -50,9 +51,11 @@ class _SignUpViewState extends State<SignUpView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo
+                Icon(Icons.shopping_bag, size: 100, color: Colors.amber[900]),
                 // Title
                 Text(
-                  "SIGN UP",
+                  "sign_up".tr(),
                   style: GoogleFonts.robotoCondensed(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -60,7 +63,7 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
                 // Subtitle
                 Text(
-                  "Create a new account",
+                  "create_a_new_account".tr(),
                   style: GoogleFonts.robotoCondensed(fontSize: 18),
                 ),
                 SizedBox(height: 50),
@@ -81,7 +84,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 .emailAddress, //!  Shows "@" on keyboard
                         controller: _emailController,
                         decoration: InputDecoration(
-                          hintText: "Email",
+                          hintText: "email".tr(),
                           border: InputBorder.none,
                         ),
                       ),
@@ -115,7 +118,7 @@ class _SignUpViewState extends State<SignUpView> {
                                     ? Icon(Icons.visibility_off)
                                     : Icon(Icons.visibility),
                           ),
-                          hintText: "Password",
+                          hintText: "password".tr(),
                           border: InputBorder.none,
                         ),
                       ),
@@ -148,7 +151,7 @@ class _SignUpViewState extends State<SignUpView> {
                                     ? Icon(Icons.visibility_off)
                                     : Icon(Icons.visibility),
                           ),
-                          hintText: "Confirm Password",
+                          hintText: "Confirm_Password".tr(),
                           border: InputBorder.none,
                         ),
                       ),
@@ -162,7 +165,7 @@ class _SignUpViewState extends State<SignUpView> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: CustomButton(
                     color: _signup  ?   Colors.amber[400]!.withValues(alpha: 1.5) :   Colors.amber[900]!,
-                    text: _signup ? "Loading..." :  "Sign up",
+                    text: _signup ? "loading".tr() :  "create".tr(),
                     onTap:
                         // TODO
                         _fakeSignup,
@@ -175,7 +178,7 @@ class _SignUpViewState extends State<SignUpView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "already have an account? ",
+                      "already_have_an_account".tr(),
                       style: GoogleFonts.robotoCondensed(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -184,7 +187,7 @@ class _SignUpViewState extends State<SignUpView> {
                     GestureDetector(
                       onTap: _openSignInView,
                       child: Text(
-                        "Back to Sign in",
+                        "Sign_in".tr(),
                         style: GoogleFonts.robotoCondensed(
                           fontWeight: FontWeight.bold,
                           color: Colors.green,

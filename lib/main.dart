@@ -1,10 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_in_view.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_up_view.dart';
 
-void main() {
-  runApp(const MyApp());
+main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      path: "lang",
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      fallbackLocale: const Locale('en'),
+
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,10 +25,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shopping App',
-      theme: ThemeData(
-        textTheme: GoogleFonts.robotoTextTheme(),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-      ),
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      theme: appTheme(context),
       debugShowCheckedModeBanner: false,
       initialRoute: SignInView.routeName,
       routes: {
@@ -26,4 +37,16 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+ThemeData appTheme(BuildContext context) {
+  final currentLocale = context.locale.languageCode;
+
+  return ThemeData(
+    textTheme:
+        currentLocale == 'ar'
+            ? GoogleFonts.cairoTextTheme()
+            : GoogleFonts.robotoTextTheme(),
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+  );
 }

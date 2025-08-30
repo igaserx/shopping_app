@@ -1,0 +1,15 @@
+{
+  "login": "SIGN IN",
+  "email": "Email",
+  "hello_login": "Hello, Login to continue using our app",
+  "password": "Password",
+  "Sign_in": "Sign in",
+  "dont_have_account": "Don't have an account? ",
+  "create_account": "Create Account",
+  "loading": "Loading...",
+  "sign_up": "SIGN UP",
+  "create_a_new_account": "Create a new account",
+  "Confirm_Password": "Confirm Password",
+  "create": "Sign up",
+  "already_have_an_account": "already have an account? "
+}

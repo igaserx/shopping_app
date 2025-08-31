@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shopping_app/core%20/errors/error_model.dart';
+import 'package:shopping_app/core/errors/error_model.dart';
 
 class ServerException implements Exception {
   ServerException({required this.errorModel});

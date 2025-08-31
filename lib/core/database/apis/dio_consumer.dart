@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:shopping_app/core%20/database/apis/api_consumer.dart';
-import 'package:shopping_app/core%20/database/apis/app_interceptor.dart';
-import 'package:shopping_app/core%20/database/apis/end_points.dart';
-import 'package:shopping_app/core%20/errors/exceptions.dart';
+import 'package:shopping_app/core/database/apis/api_consumer.dart';
+import 'package:shopping_app/core/database/apis/app_interceptor.dart';
+import 'package:shopping_app/core/database/apis/end_points.dart';
+import 'package:shopping_app/core/errors/exceptions.dart';
 
 class DioConsumer extends ApiConsumer {
   final Dio dio;

@@ -128,8 +128,11 @@ class _SignInViewState extends State<SignInView> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: CustomButton(
-                    color: _login  ?   Colors.amber[400]!.withValues(alpha: 1.5) :   Colors.amber[900]!,
-                    text: _login ? "loading".tr() : "Sign_in".tr() ,
+                    color:
+                        _login
+                            ? Colors.amber[400]!.withValues(alpha: 1.5)
+                            : Colors.amber[900]!,
+                    text: _login ? "loading".tr() : "Sign_in".tr(),
                     onTap: // TODO: Implement sign in functionality
                         _fakeLogin,
                   ),
@@ -159,7 +162,6 @@ class _SignInViewState extends State<SignInView> {
                     ),
                   ],
                 ),
-           
               ],
             ),
           ),

@@ -84,9 +84,11 @@ class _SignInViewState extends State<SignInView> {
                             TextInputType
                                 .emailAddress, //!  Shows "@" on keyboard
                         controller: _emailController,
-                        focusNode : _emailFocusNode,
-                        onSubmitted: (_){
-                          FocusScope.of(context).requestFocus(_passwordFocusNode);
+                        focusNode: _emailFocusNode,
+                        onSubmitted: (_) {
+                          FocusScope.of(
+                            context,
+                          ).requestFocus(_passwordFocusNode);
                         },
                         decoration: InputDecoration(
                           hintText: "email".tr(),
@@ -109,7 +111,7 @@ class _SignInViewState extends State<SignInView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
                         controller: _passwordController,
-                        focusNode : _passwordFocusNode,
+                        focusNode: _passwordFocusNode,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
@@ -174,6 +176,18 @@ class _SignInViewState extends State<SignInView> {
             ),
           ),
         ),
+      ),
+
+      //? Temp switch button to change language.
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (context.locale.languageCode == 'en') {
+            context.setLocale(Locale('ar'));
+          } else {
+            context.setLocale(Locale('en'));
+          }
+        },
+        child: Icon(Icons.language),
       ),
     );
   }

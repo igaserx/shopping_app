@@ -15,8 +15,12 @@ class SignInView extends StatefulWidget {
 class _SignInViewState extends State<SignInView> {
   bool _obscureText = true;
   bool _login = false;
+  // Controllers.
   final _emailController = TextEditingController(),
       _passwordController = TextEditingController();
+  // Focus Nodes.
+  final FocusNode _emailFocusNode = FocusNode(),
+      _passwordFocusNode = FocusNode();
   @override
   void dispose() {
     super.dispose();
@@ -80,6 +84,10 @@ class _SignInViewState extends State<SignInView> {
                             TextInputType
                                 .emailAddress, //!  Shows "@" on keyboard
                         controller: _emailController,
+                        focusNode : _emailFocusNode,
+                        onSubmitted: (_){
+                          FocusScope.of(context).requestFocus(_passwordFocusNode);
+                        },
                         decoration: InputDecoration(
                           hintText: "email".tr(),
                           border: InputBorder.none,
@@ -89,7 +97,6 @@ class _SignInViewState extends State<SignInView> {
                   ),
                 ),
                 SizedBox(height: 10),
-
                 // Password Textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -102,6 +109,7 @@ class _SignInViewState extends State<SignInView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
                         controller: _passwordController,
+                        focusNode : _passwordFocusNode,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(

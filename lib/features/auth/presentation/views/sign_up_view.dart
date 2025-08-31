@@ -16,9 +16,14 @@ class _SignUpViewState extends State<SignUpView> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _signup = false;
+  // Controllers.
   final _emailController = TextEditingController(),
       _passwordController = TextEditingController(),
       _confirmPasswordController = TextEditingController();
+  // Focus Nodes.
+  final FocusNode _emailFocusNode = FocusNode(),
+      _passwordFocusNode = FocusNode(),
+      _confirmPasswordFocusNode = FocusNode();
   @override
   void dispose() {
     super.dispose();
@@ -83,6 +88,10 @@ class _SignUpViewState extends State<SignUpView> {
                             TextInputType
                                 .emailAddress, //!  Shows "@" on keyboard
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
+                        onSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_passwordFocusNode);
+                        },
                         decoration: InputDecoration(
                           hintText: "email".tr(),
                           border: InputBorder.none,
@@ -105,6 +114,10 @@ class _SignUpViewState extends State<SignUpView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
                         controller: _passwordController,
+                        focusNode: _passwordFocusNode,
+                        onSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
+                        },
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
@@ -138,6 +151,7 @@ class _SignUpViewState extends State<SignUpView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
                         controller: _confirmPasswordController,
+                        focusNode: _confirmPasswordFocusNode,
                         obscureText: _obscureConfirmPassword,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(

@@ -1,3 +1,11 @@
+# Sentry / Crashlytics
+.sentry-native/
+last_crash
+settings.dat
+
+# Sensitive Config
+lib/core/settings.dart
+
 # Miscellaneous
 *.class
 *.log
@@ -43,4 +51,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase Options (Generated)
 lib/firebase_options.dart

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:shopping_app/features/auth/domain/entities/user_entity.dart';
 import 'package:shopping_app/features/auth/domain/repositories/auth_repo.dart';
 
@@ -12,17 +13,17 @@ class SignUpUseCase {
     required String confirmPassword,
   }) async {
     if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      throw Exception("All fields are required");
+      throw ("all_fields_are_required".tr());
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
-      throw Exception("Invalid email format");
+      throw ("invalid_email_format".tr());
     }
     if (password.length < 6) {
-      throw Exception("Password must be at least 6 characters");
+      throw ("password_must_be_at_least_6_characters".tr());
     }
     if (password != confirmPassword) {
-      throw Exception("Passwords do not match");
+      throw ("passwords_do_not_match".tr());
     }
     return repository.signUp(
       email: email,

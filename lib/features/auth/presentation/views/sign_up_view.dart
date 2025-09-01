@@ -62,7 +62,7 @@ class _SignUpViewState extends State<SignUpView> {
               Navigator.pushReplacementNamed(context, SignInView.routeName);
               CustomSnackBar.show(
                 context,
-                "Account created successfully, Please Sign In",
+                "account_created_successfully_please_sign_in".tr(),
                 type: SnackBarType.success,
                 duration: Duration(seconds: 3),
               );

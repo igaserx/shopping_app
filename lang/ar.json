@@ -15,5 +15,7 @@
   "all_fields_are_required": "جميع الحقول مطلوبة",
   "invalid_email_format": "تنسيق بريد إلكتروني غير صالح",
   "password_must_be_at_least_6_characters": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
-  "passwords_do_not_match": "كلمات المرور لا تتطابق"
+  "passwords_do_not_match": "كلمات المرور لا تتطابق",
+  "successfully_sign_in": "تم تسجيل الدخول بنجاح",
+  "account_created_successfully_please_sign_in": "تم إنشاء الحساب بنجاح ، يرجى تسجيل الدخول"
 }

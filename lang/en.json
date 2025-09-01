@@ -15,5 +15,7 @@
   "all_fields_are_required": "All fields are required",
   "invalid_email_format": "Invalid email format",
   "password_must_be_at_least_6_characters": "Password must be at least 6 characters",
-  "passwords_do_not_match": "Passwords do not match"
+  "passwords_do_not_match": "Passwords do not match",
+  "successfully_sign_in": "Successfully Sign In",
+  "account_created_successfully_please_sign_in": "Account created successfully, Please Sign In"
 }

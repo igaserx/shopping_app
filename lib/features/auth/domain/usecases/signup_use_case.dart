@@ -11,6 +11,16 @@ class SignUpUseCase {
     required String password,
     required String confirmPassword,
   }) async {
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      throw Exception("All fields are required");
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      throw Exception("Invalid email format");
+    }
+    if (password.length < 6) {
+      throw Exception("Password must be at least 6 characters");
+    }
     if (password != confirmPassword) {
       throw Exception("Passwords do not match");
     }

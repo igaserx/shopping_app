@@ -60,25 +60,24 @@ class _SignUpViewState extends State<SignUpView> {
             if (state is AuthLoading) {
             } else if (state is Authenticated) {
               Navigator.pushReplacementNamed(context, SignInView.routeName);
-             CustomSnackBar.show(
-              context,
-              "Account created successfully, Please Sign In",
-              type:  SnackBarType.success, 
-              duration: Duration(seconds: 3)
+              CustomSnackBar.show(
+                context,
+                "Account created successfully, Please Sign In",
+                type: SnackBarType.success,
+                duration: Duration(seconds: 3),
               );
             } else if (state is AuthError) {
               CustomSnackBar.show(
-              context,
-              state.message,
-              type:  SnackBarType.error, 
+                context,
+                state.message,
+                type: SnackBarType.error,
               );
             }
           },
 
           builder: (context, state) {
             final isLoading = state is AuthLoading;
-            return 
-            Center(
+            return Center(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -174,6 +173,7 @@ class _SignUpViewState extends State<SignUpView> {
                       ),
                     ),
                     SizedBox(height: 15),
+                   
                     // confirm Password Textfield
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -220,29 +220,11 @@ class _SignUpViewState extends State<SignUpView> {
                                 : Colors.amber[900]!,
                         text: isLoading ? "loading".tr() : "create".tr(),
                         onTap: () {
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
-                          final confirmPassword =
-                              _confirmPasswordController.text.trim();
-                          if(email.isNotEmpty && password.isNotEmpty && confirmPassword.isNotEmpty) {
-                            BlocProvider.of<AuthCubit>(context).signUp(email, password, confirmPassword);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text("Please fill in all fields"),
-                              ),
-                            );
-                           
-                          }
-                          if (password != confirmPassword) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text("Passwords do not match"),
-                              ),
-                            );
-                          }
+                          context.read<AuthCubit>().signUp(
+                            _emailController.text.trim(),
+                            _passwordController.text.trim(),
+                            _confirmPasswordController.text.trim(),
+                          );
                         },
                       ),
                     ),
@@ -271,6 +253,7 @@ class _SignUpViewState extends State<SignUpView> {
                         ),
                       ],
                     ),
+                 
                   ],
                 ),
               ),

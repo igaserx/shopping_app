@@ -11,5 +11,9 @@
   "create_a_new_account": "إنشاء حساب جديد",
   "Confirm_Password": "تأكيد كلمة المرور",
   "create": "اشتراك",
-  "already_have_an_account": "هل لديك بالفعل حساب؟ "
+  "already_have_an_account": "هل لديك بالفعل حساب؟ ",
+  "all_fields_are_required": "جميع الحقول مطلوبة",
+  "invalid_email_format": "تنسيق بريد إلكتروني غير صالح",
+  "password_must_be_at_least_6_characters": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "passwords_do_not_match": "كلمات المرور لا تتطابق"
 }

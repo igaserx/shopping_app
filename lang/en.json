@@ -11,5 +11,9 @@
   "create_a_new_account": "Create a new account",
   "Confirm_Password": "Confirm Password",
   "create": "Sign up",
-  "already_have_an_account": "already have an account? "
+  "already_have_an_account": "already have an account? ",
+  "all_fields_are_required": "All fields are required",
+  "invalid_email_format": "Invalid email format",
+  "password_must_be_at_least_6_characters": "Password must be at least 6 characters",
+  "passwords_do_not_match": "Passwords do not match"
 }

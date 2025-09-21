@@ -13,7 +13,7 @@ getAllProducts() async {
   emit(ProductLoading());
   try {
     final products = await getAllProductsUseCase.call();
-    emit(ProductLoaded(products: products));
+    emit(ProductLoaded(products: products..shuffle()));
   } catch (e) {
     emit(ProductError(message: e.toString()));
   }
@@ -22,7 +22,7 @@ getAllProducts() async {
     emit(ProductLoading());
     try {
       final products = await getProductByCategoryUsecase.call(category);
-      emit(ProductLoaded(products: products));
+      emit(ProductLoaded(products: products..shuffle()));
     } catch (e) {
       emit(ProductError(message: e.toString()));
     }

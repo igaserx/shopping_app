@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/features/products/presentation/views/home_view.dart';
-
+import 'package:shopping_app/features/products/data/models/banner_item.dart';
 class SalesBanner extends StatefulWidget {
   final List<BannerItem> banners;
   final VoidCallback? onBannerTap;

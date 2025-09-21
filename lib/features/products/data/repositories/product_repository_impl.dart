@@ -13,4 +13,10 @@ class ProductRepositoryImpl implements ProductRepository {
     final productsJson = await remoteDataSource.getAllProducts();
     return productsJson.map((json) => ProductModel.fromJson(json)).toList();
   }
+  
+ @override
+  Future<List<ProductEntity>> getProductByCategory(List<String> category) async {
+    final productsJson = await remoteDataSource.getProductByCategory(category);
+    return productsJson.map((json) => ProductModel.fromJson(json)).toList();
+  }
 }

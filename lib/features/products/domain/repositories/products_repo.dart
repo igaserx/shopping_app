@@ -2,4 +2,5 @@ import 'package:shopping_app/features/products/domain/entities/product_entity.da
 
 abstract class ProductRepository {
   Future<List<ProductEntity>> getAllProducts();
+  Future<List<ProductEntity>> getProductByCategory(List<String> categories);
 }

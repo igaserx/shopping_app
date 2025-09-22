@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/utils/utils.dart';
+import 'package:shopping_app/core/widgets/discount_widget.dart';
 import 'package:shopping_app/core/widgets/hot_widget.dart';
+import 'package:shopping_app/core/widgets/sale_widget.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/views/product_details.dart';
 
@@ -26,7 +29,7 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
   bool isFavorite = false;
   late AnimationController _favoriteController;
   late AnimationController _scaleController;
-
+  late final ProductEntity product;
   @override
   void initState() {
     super.initState();
@@ -38,6 +41,8 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
+    //! Product entity
+    product = widget.product;
   }
 
   @override
@@ -53,13 +58,14 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProductDetailsView(product: widget.product),
+          builder: (context) => ProductDetailsView(product: product),
         ),
       );
     }
   }
   @override
   Widget build(BuildContext context) {
+    final discountPrice = Utils.getDiscountedPrice(product.price, product.discount);
     return GestureDetector(
       onTapDown: (_) => _scaleController.forward(),
       onTapUp: (_) 
@@ -120,7 +126,7 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.network(
-                            widget.product.imageUrl,
+                            product.thumbnail,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) => Container(
                               decoration: BoxDecoration(
@@ -199,12 +205,19 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                     ),
 
                     //! Hot
-                    if (widget.product.price > 50)
+                    if (product.rating > 4.5)
                       Positioned(
                         top: 8,
                         left: 8,
                         child: HotWidget(),
-                      ),
+                      )
+                    //! Sale
+                    else if(product.discount >= 18)
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: SaleWidget(),
+                      )
 
                   ],
                 ),
@@ -222,7 +235,7 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                         children: [
                           //! Title
                           Text(
-                            widget.product.title,
+                            product.title,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -251,16 +264,16 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                                       ),
                                     ),
                                     TextSpan(
-                                      text: widget.product.price.toStringAsFixed(0),
+                                      text: discountPrice.toStringAsFixed(0),
                                       style: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF059669),
                                       ),
                                     ),
-                                    if (widget.product.price % 1 != 0)
+                                    if (discountPrice % 1 != 0)
                                       TextSpan(
-                                        text: '.${((widget.product.price % 1) * 100).toInt().toString().padLeft(2, '0')}',
+                                        text: '.${((discountPrice % 1) * 100).toInt().toString().padLeft(2, '0')}',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
@@ -287,7 +300,7 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                                     const Icon(Icons.star, color: Colors.amber, size: 12),
                                     const SizedBox(width: 2),
                                     Text(
-                                      widget.product.rating.toStringAsFixed(1),
+                                      product.rating.toStringAsFixed(1),
                                       style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/utils/utils.dart';
+import 'package:shopping_app/core/widgets/hot_widget.dart';
+import 'package:shopping_app/core/widgets/sale_widget.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/views/product_details.dart';
 
@@ -25,6 +28,8 @@ class _VerticalProductCardState extends State<VerticalProductCard>
   bool isFavorite = false;
   late AnimationController _favoriteController;
   late AnimationController _scaleController;
+  late final ProductEntity product ;
+  
 
   @override
   void initState() {
@@ -37,6 +42,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
+    product = widget.product;
   }
 
   @override
@@ -56,11 +62,10 @@ class _VerticalProductCardState extends State<VerticalProductCard>
           builder: (context) => ProductDetailsView(product: widget.product),
         ),
       );
-    }
-  }
-
+      }  }  
   @override
   Widget build(BuildContext context) {
+    final discountPrice = Utils.getDiscountedPrice(product.price, product.discount);
     return GestureDetector(
       onTapDown: (_) => _scaleController.forward(),
       onTapUp: (_) {
@@ -112,9 +117,9 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Hero(
-                            tag: 'product-image-${widget.product.id ?? widget.product.title}',
+                            tag: 'product-image-${widget.product.id}',
                             child: Image.network(
-                              widget.product.imageUrl,
+                              product.thumbnail,
                               fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) => Container(
                                 decoration: BoxDecoration(
@@ -191,7 +196,21 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                         ),
                       ),
                     ),
-                  
+
+                    //! Hot
+                    if (product.rating > 4.5)
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: HotWidget(),
+                      )
+                    //! Sale
+                    else if(product.discount >= 18)
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: SaleWidget(),
+                      )                 
                   ],
                 ),
               ),
@@ -209,7 +228,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                         children: [
                           //! name
                           Text(
-                            widget.product.title,
+                            product.title,
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -238,16 +257,16 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                       ),
                                     ),
                                     TextSpan(
-                                      text: widget.product.price.toStringAsFixed(0),
+                                      text: discountPrice.toStringAsFixed(0),
                                       style: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF059669),
                                       ),
                                     ),
-                                    if (widget.product.price % 1 != 0)
+                                    if (discountPrice % 1 != 0)
                                       TextSpan(
-                                        text: '.${((widget.product.price % 1) * 100).toInt().toString().padLeft(2, '0')}',
+                                        text: '.${((discountPrice % 1) * 100).toInt().toString().padLeft(2, '0')}',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
@@ -263,7 +282,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                   const Icon(Icons.star, color: Colors.amber, size: 16),
                                   const SizedBox(width: 4),
                                   Text(
-                                    widget.product.rating.toStringAsFixed(1),
+                                    product.rating.toStringAsFixed(1),
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey,
@@ -308,7 +327,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                       onTap: widget.onBuyNow ?? () {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text('Proceeding to buy ${widget.product.title}'),
+                                            content: Text('Proceeding to buy ${product.title}'),
                                             backgroundColor: const Color(0xFFFF5722),
                                             behavior: SnackBarBehavior.floating,
                                             shape: RoundedRectangleBorder(
@@ -355,7 +374,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                     onTap: widget.onAddToCart ?? () {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                          content: Text('${widget.product.title} added to cart!'),
+                                          content: Text('${product.title} added to cart!'),
                                           backgroundColor: const Color(0xFF4CAF50),
                                           behavior: SnackBarBehavior.floating,
                                           shape: RoundedRectangleBorder(

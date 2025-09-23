@@ -520,6 +520,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   }
 
   Widget _reviewItem(ReviewEntity review) {
+    int daysAgo = Utils.daysAgo(review.date.toString()) ;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -550,7 +551,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                   ),
                   const Spacer(),
                   Text(
-                    review.reviewerName,
+                    daysAgo == 1 ?
+                    "$daysAgo Day ago" 
+                    : "$daysAgo Days ago",
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],

@@ -103,6 +103,8 @@ class HomeViewBody extends StatefulWidget {
 
 class _HomeViewBodyState extends State<HomeViewBody> {
   final ScrollController _scrollController = ScrollController();
+  int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -112,6 +114,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -119,28 +122,104 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await context.read<ProductCubit>().getAllProducts();
-          },
-          color: const Color(0xFFFF5722),
-          child: BlocBuilder<ProductCubit, ProductState>(
-            builder: (context, state) {
-              if (state is ProductInitial) {
-                return _buildInitialState();
-              } else if (state is ProductLoading) {
-                return _buildLoadingState();
-              } else if (state is ProductLoaded) {
-                return _buildLoadedState(state.products);
-              } else if (state is ProductError) {
-                return _buildErrorState(state.message);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
+        body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        children: [
+          _homeBody(context),
+          CartView(),
+          
+        ],
       ),
+        bottomNavigationBar: _buildBottombar(
+        _currentIndex,
+        (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          _pageController.animateToPage(
+            index,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        },
+      ),
+        ),
     );
+  }
+  Widget _buildBottombar(int currentIndex, Function(int) onTap) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withValues(alpha:  0.2),
+          blurRadius: 8,
+          offset: Offset(0, -2),
+        ),
+      ],
+    ),
+    child: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.orange,
+      unselectedItemColor: Colors.grey[600],
+      currentIndex: currentIndex,
+      onTap: onTap,
+      selectedFontSize: 12,
+      unselectedFontSize: 12,
+      elevation: 0,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_cart_outlined),
+          activeIcon: Icon(Icons.shopping_cart),
+          label: "Cart",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_border),
+          activeIcon: Icon(Icons.favorite),
+          label: "Favorite",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          activeIcon: Icon(Icons.person),
+          label: "Profile",
+        ),
+      ],
+    ),
+  );
+}
+  
+  RefreshIndicator _homeBody(BuildContext context) {
+    return RefreshIndicator(
+        onRefresh: () async {
+          await context.read<ProductCubit>().getAllProducts();
+        },
+        color: const Color(0xFFFF5722),
+        child: BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            if (state is ProductInitial) {
+              return _buildInitialState();
+            } else if (state is ProductLoading) {
+              return _buildLoadingState();
+            } else if (state is ProductLoaded) {
+              return _buildLoadedState(state.products);
+            } else if (state is ProductError) {
+              return _buildErrorState(state.message);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      );
   }
 
   Widget _buildInitialState() {
@@ -373,20 +452,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         ],
                       ),
                     ),
-                    //! Cart
-                    IconButton(
-                      icon: const Icon(
-                        Icons.production_quantity_limits,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CartPage()),
-);
-                      },
-                    ),
-                  
                   ],
                 ),
                 const SizedBox(height: 16),

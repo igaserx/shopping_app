@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/hot_widget.dart';
+import 'package:shopping_app/core/widgets/price_widget.dart';
 import 'package:shopping_app/core/widgets/sale_widget.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/views/product_details.dart';
@@ -245,37 +246,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                             //! price
-                            RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: '\$',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: discountPrice.toStringAsFixed(0),
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF059669),
-                                      ),
-                                    ),
-                                    if (discountPrice % 1 != 0)
-                                      TextSpan(
-                                        text: '.${((discountPrice % 1) * 100).toInt().toString().padLeft(2, '0')}',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xFF059669),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
+                            PriceWidget(price: discountPrice),
                               //! rate
                               Row(
                                 children: [
@@ -371,18 +342,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
-                                    onTap: widget.onAddToCart ?? () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('${product.title} added to cart!'),
-                                          backgroundColor: const Color(0xFF4CAF50),
-                                          behavior: SnackBarBehavior.floating,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                    onTap: widget.onAddToCart,
                                     borderRadius: BorderRadius.circular(12),
                                     splashColor: Colors.white.withValues(alpha:  0.1),
                                     highlightColor: Colors.white.withValues(alpha:  0.05),

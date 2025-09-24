@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/DI/di.dart';
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/h_product_card.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
@@ -291,7 +292,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
               final product = products[index];
               return HorizontalProductCard(
                 product: product,
-                onAddToCart: () => _onAddToCart(product),
+                onAddToCart: () => Utils.onAddToCart(context, product: product),
                 onBuyNow: () => _onBuyNow(product),
               );
             },
@@ -436,18 +437,6 @@ class _ProductViewBodyState extends State<ProductViewBody> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _onAddToCart(ProductEntity product) {
-    // TODO: Implement add to cart functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product.title} added to cart!'),
-        backgroundColor: const Color(0xFF4CAF50),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

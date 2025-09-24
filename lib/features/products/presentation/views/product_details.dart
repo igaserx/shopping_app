@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/discount_widget.dart';
+import 'package:shopping_app/core/widgets/price_widget.dart';
+import 'package:shopping_app/features/cart/presentation/cubits/cubit/cart_cubit.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/domain/entities/subEntities/review_entity.dart';
+
+import '../../../cart/domain/entities/cart_item.dart';
 
 class ProductDetailsView extends StatefulWidget {
   static const String routeName = "ProductDetailsView";
@@ -227,38 +232,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
           Row(
             children: [
               //! Price
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '\$',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    TextSpan(
-                      text: discountedPrice.toStringAsFixed(0),
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF059669),
-                      ),
-                    ),
-                    if (discountedPrice % 1 != 0)
-                      TextSpan(
-                        text:
-                            '.${((discountedPrice % 1) * 100).toInt().toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF059669),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+            PriceWidget(price: discountedPrice, size: 28,),
 
               const SizedBox(width: 12),
 
@@ -716,9 +690,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                 height: 50,
                 margin: const EdgeInsets.only(right: 12),
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO
-                  },
+                  onPressed: () => Utils.onAddToCart(context, product: product),
                   icon: const Icon(Icons.shopping_cart_outlined),
                   label: const Text('Add to Cart'),
                   style: ElevatedButton.styleFrom(

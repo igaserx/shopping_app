@@ -11,6 +11,8 @@ import 'package:shopping_app/features/products/presentation/widgets/category.dar
 import 'package:shopping_app/core/widgets/v_product_card.dart';
 import 'package:shopping_app/features/products/presentation/widgets/sales_banner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../../core/utils/utils.dart';
+import 'package:shopping_app/features/cart/presentation/views/cart_view.dart';
 
 const Map<String, List<String>> mainCategories = {
   "Electronics": ["smartphones", "laptops"],
@@ -80,6 +82,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final String userEmail = FirebaseAuth.instance.currentUser?.email ?? 'User';
     final String userName = userEmail.split('@')[0];
+    
+    
 
     return BlocProvider(
       create: (context) => di<ProductCubit>()..getAllProducts(),
@@ -300,17 +304,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     );
   }
 
-  void _onAddToCart(ProductEntity product) {
-    // TODO: add to cart
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product.title} added to cart!'),
-        backgroundColor: const Color(0xFF4CAF50),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
 
   void _onBuyNow(ProductEntity product) {
     // TODO: go buy
@@ -386,7 +379,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         Icons.production_quantity_limits,
                         color: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartPage()),
+);
+                      },
                     ),
                   
                   ],
@@ -502,7 +500,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               final product = products[index];
               return VerticalProductCard(
                 product: product,
-                onAddToCart: () {},
+                onAddToCart: () => Utils.onAddToCart(context, product: product),
                 onTap: () {
                   Navigator.push(
                     context,

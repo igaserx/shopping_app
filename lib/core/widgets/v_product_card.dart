@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
+import 'package:shopping_app/core/widgets/favorite_button.dart';
 import 'package:shopping_app/core/widgets/hot_widget.dart';
 import 'package:shopping_app/core/widgets/price_widget.dart';
 import 'package:shopping_app/core/widgets/sale_widget.dart';
@@ -26,8 +28,6 @@ class VerticalProductCard extends StatefulWidget {
 
 class _VerticalProductCardState extends State<VerticalProductCard>
     with TickerProviderStateMixin {
-  bool isFavorite = false;
-  late AnimationController _favoriteController;
   late AnimationController _scaleController;
   late final ProductEntity product ;
   
@@ -35,10 +35,6 @@ class _VerticalProductCardState extends State<VerticalProductCard>
   @override
   void initState() {
     super.initState();
-    _favoriteController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
     _scaleController = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
@@ -48,7 +44,6 @@ class _VerticalProductCardState extends State<VerticalProductCard>
 
   @override
   void dispose() {
-    _favoriteController.dispose();
     _scaleController.dispose();
     super.dispose();
   }
@@ -155,47 +150,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                     Positioned(
                       top: 12,
                       right: 12,
-                      child: GestureDetector(
-                        onTap: () {
-                          // Todo : add To fav
-                          setState(() {
-                            isFavorite = !isFavorite;
-                          });
-                          if (isFavorite) {
-                            _favoriteController.forward();
-                          } else {
-                            _favoriteController.reverse();
-                          }
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: isFavorite ? Colors.red[50] : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha:  0.1),
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: ScaleTransition(
-                            scale: Tween<double>(begin: 1.0, end: 1.2).animate(
-                              CurvedAnimation(
-                                parent: _favoriteController,
-                                curve: Curves.elasticOut,
-                              ),
-                            ),
-                            child: Icon(
-                              isFavorite ? Icons.favorite : Icons.favorite_border,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ),
+                      child:FavoriteButton(product: product)
                     ),
 
                     //! Hot
@@ -295,18 +250,7 @@ class _VerticalProductCardState extends State<VerticalProductCard>
                                   child: Material(
                                     color: Colors.transparent,
                                     child: InkWell(
-                                      onTap: widget.onBuyNow ?? () {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('Proceeding to buy ${product.title}'),
-                                            backgroundColor: const Color(0xFFFF5722),
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                      onTap: widget.onBuyNow,
                                       borderRadius: BorderRadius.circular(12),
                                       child: const Center(
                                         child: Text(

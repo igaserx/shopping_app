@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/utils/utils.dart';
+import 'package:shopping_app/core/widgets/favorite_button.dart';
 import 'package:shopping_app/core/widgets/hot_widget.dart';
 import 'package:shopping_app/core/widgets/price_widget.dart';
+import 'package:shopping_app/core/widgets/rating_widget.dart';
 import 'package:shopping_app/core/widgets/sale_widget.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/views/product_details.dart';
@@ -26,17 +28,11 @@ class HorizontalProductCard extends StatefulWidget {
 
 class _HorizontalProductCardState extends State<HorizontalProductCard>
     with TickerProviderStateMixin {
-  bool isFavorite = false;
-  late AnimationController _favoriteController;
   late AnimationController _scaleController;
   late final ProductEntity product;
   @override
   void initState() {
     super.initState();
-    _favoriteController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
     _scaleController = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
@@ -47,7 +43,6 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
 
   @override
   void dispose() {
-    _favoriteController.dispose();
     _scaleController.dispose();
     super.dispose();
   }
@@ -161,47 +156,7 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                     Positioned(
                       top: 8,
                       right: 8,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isFavorite = !isFavorite;
-                          });
-                          if (isFavorite) {
-                            _favoriteController.forward();
-                          } else {
-                            _favoriteController.reverse();
-                          }
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: isFavorite ? Colors.red[50] : Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha:  0.1),
-                                blurRadius: 6,
-                                spreadRadius: 0,
-                                offset: const Offset(0, 1),
-                              ),
-                            ],
-                          ),
-                          child: ScaleTransition(
-                            scale: Tween<double>(begin: 1.0, end: 1.2).animate(
-                              CurvedAnimation(
-                                parent: _favoriteController,
-                                curve: Curves.elasticOut,
-                              ),
-                            ),
-                            child: Icon(
-                              isFavorite ? Icons.favorite : Icons.favorite_border,
-                              color: Colors.red,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: FavoriteButton(product: product)
                     ),
 
                     //! Hot
@@ -253,33 +208,9 @@ class _HorizontalProductCardState extends State<HorizontalProductCard>
                             children: [
                               //! Price
                               PriceWidget(price: discountPrice),
+                              
                               //! rate
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber[50],
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: Colors.amber[200]!,
-                                    width: 0.5,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.star, color: Colors.amber, size: 12),
-                                    const SizedBox(width: 2),
-                                    Text(
-                                      product.rating.toStringAsFixed(1),
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF92400E),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              RatingWidget(rate: product.rating),
 
                             ],
                           ),

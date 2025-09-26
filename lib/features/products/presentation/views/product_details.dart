@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/discount_widget.dart';
+import 'package:shopping_app/core/widgets/favorite_button.dart';
 import 'package:shopping_app/core/widgets/price_widget.dart';
-import 'package:shopping_app/features/cart/presentation/cubits/cubit/cart_cubit.dart';
+import 'package:shopping_app/features/favorite/cubits/favorite_cubit.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/domain/entities/subEntities/review_entity.dart';
-
-import '../../../cart/domain/entities/cart_item.dart';
-
 class ProductDetailsView extends StatefulWidget {
   static const String routeName = "ProductDetailsView";
   final ProductEntity product;
@@ -79,21 +77,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
       elevation: 0,
       actions: [
         //! Fav
-        IconButton(
-          onPressed: () {
-            setState(() {
-              isFavorite = !isFavorite;
-            });
-          },
-          icon: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              key: ValueKey(isFavorite),
-              color: isFavorite ? Colors.red : null,
-            ),
-          ),
-        ),
+        FavoriteButton(product: product, background: false, size: 24, padding: 8.0,),
 
         const SizedBox(width: 8),
 
@@ -710,7 +694,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO
+                    Utils.onBuyNow(context, product: product);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF5722),

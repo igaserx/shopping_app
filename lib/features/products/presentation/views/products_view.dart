@@ -6,6 +6,7 @@ import 'package:shopping_app/core/widgets/h_product_card.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_state.dart';
+import 'package:shopping_app/features/products/presentation/widgets/search.dart';
 
 class ProductView extends StatelessWidget {
   static const String routeName = "ProductView";
@@ -93,17 +94,15 @@ class _ProductViewBodyState extends State<ProductViewBody> {
       actions: [
         IconButton(
           onPressed: () {
-            // TODO: search
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProductSearchScreen(),
+              ),
+            );
           },
           icon: const Icon(Icons.search_rounded),
         ),
-        IconButton(
-          onPressed: () {
-            // TODO: 
-          },
-          icon: const Icon(Icons.tune_rounded),
-        ),
-        const SizedBox(width: 8),
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
@@ -293,7 +292,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
               return HorizontalProductCard(
                 product: product,
                 onAddToCart: () => Utils.onAddToCart(context, product: product),
-                onBuyNow: () => _onBuyNow(product),
+                onBuyNow: () => Utils.onBuyNow(context, product: product),
               );
             },
           ),
@@ -437,18 +436,6 @@ class _ProductViewBodyState extends State<ProductViewBody> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _onBuyNow(ProductEntity product) {
-    // TODO: Implement buy now functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Proceeding to buy ${product.title}'),
-        backgroundColor: const Color(0xFFFF5722),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

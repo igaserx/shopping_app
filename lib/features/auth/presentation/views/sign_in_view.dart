@@ -7,7 +7,8 @@ import 'package:shopping_app/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_state.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_up_view.dart';
 import 'package:shopping_app/features/auth/presentation/widgets/cutom_buttom.dart';
-import 'package:shopping_app/features/home_view.dart';
+import 'package:shopping_app/features/products/presentation/views/home_view.dart';
+
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -19,7 +20,7 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> {
   bool _obscureText = true;
-  // bool _login = false;
+  
   // Controllers.
   final _emailController = TextEditingController(),
       _passwordController = TextEditingController();
@@ -32,16 +33,6 @@ class _SignInViewState extends State<SignInView> {
     _emailController.dispose();
     _passwordController.dispose();
   }
-
-  // _fakeLogin() async {
-  //   setState(() {
-  //     _login = true;
-  //   });
-  //   await Future.delayed(Duration(seconds: 3));
-  //   setState(() {
-  //     _login = false;
-  //   });
-  // }
 
   _openSignUpView() {
     Navigator.of(context).pushReplacementNamed(SignUpView.routeName);
@@ -207,17 +198,6 @@ class _SignInViewState extends State<SignInView> {
         ),
       ),
 
-      //? Temp switch button to change language.
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (context.locale.languageCode == 'en') {
-            context.setLocale(Locale('ar'));
-          } else {
-            context.setLocale(Locale('en'));
-          }
-        },
-        child: Icon(Icons.language),
-      ),
     );
   }
 }

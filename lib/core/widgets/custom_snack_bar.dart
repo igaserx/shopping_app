@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum SnackBarType { success, error, warning }
+enum SnackBarType { success, error, warning, custom }
 
 class CustomSnackBar {
   static void show(
@@ -8,8 +8,9 @@ class CustomSnackBar {
     String message, {
     SnackBarType type = SnackBarType.success,
     Duration duration = const Duration(seconds: 3),
+    Color? customColor,
   }) {
-    final color = _getBackgroundColor(type);
+    final color = _getBackgroundColor(type, customColor);
     final icon = _getIcon(type);
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -34,7 +35,7 @@ class CustomSnackBar {
     );
   }
 
-  static Color _getBackgroundColor(SnackBarType type) {
+  static Color _getBackgroundColor(SnackBarType type, Color? customColor) {
     switch (type) {
       case SnackBarType.success:
         return Colors.green;
@@ -42,6 +43,8 @@ class CustomSnackBar {
         return Colors.red;
       case SnackBarType.warning:
         return Colors.orange;
+      case SnackBarType.custom:
+        return customColor ?? Colors.blueGrey;
     }
   }
 
@@ -53,6 +56,8 @@ class CustomSnackBar {
         return Icons.error_outline;
       case SnackBarType.warning:
         return Icons.warning_amber_outlined;
+      case SnackBarType.custom:
+        return Icons.info_outline;
     }
   }
 }

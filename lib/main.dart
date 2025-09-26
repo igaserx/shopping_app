@@ -1,19 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping_app/core/DI/di.dart';
+import 'package:shopping_app/core/auth_wrapper.dart';
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_in_view.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_up_view.dart';
-import 'package:shopping_app/features/home_view.dart';
+import 'package:shopping_app/features/cart/cubits/cart_cubit.dart';
+import 'package:shopping_app/features/favorite/cubits/favorite_cubit.dart';
+import 'package:shopping_app/features/products/presentation/views/home_view.dart';
+import 'package:shopping_app/features/products/presentation/views/products_view.dart';
 import 'package:shopping_app/firebase_options.dart';
+import 'package:shopping_app/routes/app_routes.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,7 +31,11 @@ main() async {
       fallbackLocale: const Locale('en'),
       child: MultiBlocProvider(
          providers: [
-        BlocProvider(create: (_) => AuthCubit(signInUseCase: di(), signUpUseCase: di(), signOutUseCase: di())),
+        BlocProvider(create: (_) => AuthCubit(signInUseCase: di(), signUpUseCase: di(), signOutUseCase: di(),)),
+        BlocProvider(create: (_) => CartCubit()),
+         BlocProvider<FavoritesCubit>(
+      create: (context) => FavoritesCubit(),
+    ),
       ],
         child: const MyApp()
         ),
@@ -43,26 +53,10 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
-      theme: appTheme(context),
+      theme: Utils.appTheme(context),
       debugShowCheckedModeBanner: false,
-      initialRoute: SignInView.routeName,
-      routes: {
-        SignInView.routeName: (context) => const SignInView(),
-        SignUpView.routeName: (context) => const SignUpView(),
-        HomeView.routeName: (context) => const HomeView(),
-      },
+      home: AuthWrapper(),
+      routes: AppRoutes.routes
     );
   }
-}
-
-ThemeData appTheme(BuildContext context) {
-  final currentLocale = context.locale.languageCode;
-
-  return ThemeData(
-    textTheme:
-        currentLocale == 'ar'
-            ? GoogleFonts.cairoTextTheme()
-            : GoogleFonts.robotoTextTheme(),
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-  );
 }

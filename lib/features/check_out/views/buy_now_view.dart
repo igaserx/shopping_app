@@ -17,12 +17,6 @@ class _BuyNowViewState extends State<BuyNowView> {
   final _phoneController = TextEditingController();
   String _selectedPayment = 'Cash on Delivery';
 
-  final List<String> _paymentMethods = [
-    'Cash on Delivery',
-    'Credit Card',
-    'Mobile Wallet',
-  ];
-
   @override
   void dispose() {
     _addressController.dispose();
@@ -221,20 +215,21 @@ class _BuyNowViewState extends State<BuyNowView> {
             ),
           ),
           const SizedBox(height: 16),
-          ..._paymentMethods.map(
-            (method) => RadioListTile<String>(
-              value: method,
-              groupValue: _selectedPayment,
-              onChanged: (value) {
-                setState(() {
-                  _selectedPayment = value!;
-                });
-              },
-              title: Text(method),
-              activeColor: const Color(0xFFFF5722),
-              contentPadding: EdgeInsets.zero,
-            ),
-          ),
+            
+RadioGroup<String>(
+  groupValue: _selectedPayment,
+  onChanged: (String? value) {
+    setState(() {
+      _selectedPayment = value!;
+    });
+  },
+  child: RadioListTile<String>(
+    value: "Cash on Delivery",
+    title: const Text("Cash on Delivery"),
+    contentPadding: EdgeInsets.zero,
+    activeColor: const Color(0xFFFF5722),
+  ),
+)
         ],
       ),
     );

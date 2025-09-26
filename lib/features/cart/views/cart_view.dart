@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/custom_snack_bar.dart';
 import 'package:shopping_app/core/widgets/price_widget.dart';
-import 'package:shopping_app/features/cart/presentation/cubits/cubit/cart_cubit.dart';
-import 'package:shopping_app/features/cart/presentation/cubits/cubit/cart_state.dart';
-import '../../domain/entities/cart_item.dart';
+import 'package:shopping_app/features/cart/cubits/cart_cubit.dart';
+import 'package:shopping_app/features/cart/cubits/cart_state.dart';
+import 'package:shopping_app/features/cart/models/cart_item.dart';
 
 class CartView extends StatelessWidget {
   const CartView({super.key});
@@ -94,20 +95,6 @@ class CartView extends StatelessWidget {
           Text(
             'Add some items to get started',
             style: TextStyle(fontSize: 16, color: Colors.grey[500]),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.shopping_bag_outlined),
-            label: const Text('Continue Shopping'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF5722),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
           ),
         ],
       ),
@@ -293,6 +280,7 @@ class CartView extends StatelessWidget {
   }
 
   Widget _buildProductDetails(CartItem item) {
+    final price =  Utils.getDiscountedPrice(item.product.price, item.product.discount);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -311,7 +299,7 @@ class CartView extends StatelessWidget {
         const SizedBox(height: 6),
 
         //! Price
-        PriceWidget(price: item.product.price),
+        PriceWidget(price: price),
       ],
     );
   }
@@ -425,6 +413,7 @@ class CartView extends StatelessWidget {
   }
 
   Widget _buildPriceSummary(CartState state) {
+    
     final itemCount = state.items.fold<int>(
       0,
       (sum, item) => sum + item.quantity,
@@ -447,7 +436,10 @@ class CartView extends StatelessWidget {
                 'Subtotal ($itemCount items)',
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
+
+              //! Price
               PriceWidget(price: state.totalPrice, prColor:Colors.grey[600]!, size: 16,)
+            
             ],
           ),
           const SizedBox(height: 8),
@@ -502,7 +494,7 @@ class CartView extends StatelessWidget {
       height: 50,
       child: ElevatedButton.icon(
         onPressed:
-            state.items.isNotEmpty ? () => _proceedToCheckout(context) : null,
+            state.items.isNotEmpty ? () => Utils.onProceedingToBuy(context) : null,
         icon: const Icon(Icons.shopping_cart_checkout),
         label: const Text(
           'Proceed to Checkout',

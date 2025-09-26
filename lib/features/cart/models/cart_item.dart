@@ -1,3 +1,4 @@
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 
 class CartItem {
@@ -6,7 +7,7 @@ class CartItem {
 
   CartItem({required this.product, required this.quantity});
 
-  double get totalPrice => product.price * quantity;
+  double get totalPrice => Utils.getDiscountedPrice(product.price, product.discount) * quantity;
 
   CartItem copyWith({ProductEntity? product, int? quantity}) {
     return CartItem(

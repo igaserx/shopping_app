@@ -1,4 +1,4 @@
-import 'package:shopping_app/features/cart/domain/entities/cart_item.dart';
+import 'package:shopping_app/features/cart/models/cart_item.dart';
 
 class CartState {
   final List<CartItem> items;

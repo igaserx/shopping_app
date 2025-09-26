@@ -54,3 +54,6 @@ app.*.map.json
 
 # Firebase Options (Generated)
 lib/firebase_options.dart
+#
+lib/core/secret_key.dart
+assets/imag.jpg

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/DI/di.dart';
+import 'package:shopping_app/features/cart/views/cart_view.dart';
+import 'package:shopping_app/features/favorite/views/favorite_view.dart';
 import 'package:shopping_app/features/products/data/models/banner_item.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
@@ -9,10 +11,12 @@ import 'package:shopping_app/features/products/presentation/views/product_detail
 import 'package:shopping_app/features/products/presentation/views/products_view.dart';
 import 'package:shopping_app/features/products/presentation/widgets/category.dart';
 import 'package:shopping_app/core/widgets/v_product_card.dart';
+import 'package:shopping_app/features/products/presentation/widgets/home_loading_widget.dart';
 import 'package:shopping_app/features/products/presentation/widgets/sales_banner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shopping_app/features/products/presentation/views/search_view.dart';
+import 'package:shopping_app/features/profile/views/profile_view.dart';
 import '../../../../core/utils/utils.dart';
-import 'package:shopping_app/features/cart/presentation/views/cart_view.dart';
 
 const Map<String, List<String>> mainCategories = {
   "Electronics": ["smartphones", "laptops"],
@@ -28,32 +32,19 @@ const Map<String, List<String>> mainCategories = {
     "womens-jewellery",
     "sunglasses",
   ],
-  "Home & Living": ["groceries", "home-decoration", "furniture", "lighting"],
+  "Home": ["home-decoration", "furniture", "lighting"],
+  "Food": ["groceries"],
   "Beauty & Health": ["fragrances", "skincare"],
   "Automotive": ["automotive", "motorcycle"],
 };
 
 final List<Map<String, String>> categoriesData = [
-  {
-    "name": "Electronics",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/1055/1055687.png",
-  },
-  {
-    "name": "Fashion",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/892/892458.png",
-  },
-  {
-    "name": "Home & Living",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/2909/2909763.png",
-  },
-  {
-    "name": "Beauty & Health",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/869/869869.png",
-  },
-  {
-    "name": "Automotive",
-    "imageUrl": "https://cdn-icons-png.flaticon.com/512/743/743131.png",
-  },
+  {"name": "Electronics", "imageUrl": "assets/electroinc.png"},
+  {"name": "Fashion", "imageUrl": "assets/fashion.png"},
+  {"name": "Home", "imageUrl": "assets/home.png"},
+  {"name": "Food", "imageUrl": "assets/food.png"},
+  {"name": "Beauty & Health", "imageUrl": "assets/beauty.png"},
+  {"name": "Automotive", "imageUrl": "assets/automotive.png"},
 ];
 
 final List<BannerItem> bannersData = [
@@ -82,8 +73,6 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final String userEmail = FirebaseAuth.instance.currentUser?.email ?? 'User';
     final String userName = userEmail.split('@')[0];
-    
-    
 
     return BlocProvider(
       create: (context) => di<ProductCubit>()..getAllProducts(),
@@ -123,21 +112,20 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     return SafeArea(
       child: Scaffold(
         body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        children: [
-          _homeBody(context),
-          CartView(),
-          
-        ],
-      ),
-        bottomNavigationBar: _buildBottombar(
-        _currentIndex,
-        (index) {
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          children: [
+            _homeBody(context),
+            CartView(),
+            FavoriteView(),
+            ProfileView(),
+          ],
+        ),
+        bottomNavigationBar: _buildBottombar(_currentIndex, (index) {
           setState(() {
             _currentIndex = index;
           });
@@ -146,80 +134,80 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-        },
+        }),
       ),
-        ),
     );
   }
+
   Widget _buildBottombar(int currentIndex, Function(int) onTap) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withValues(alpha:  0.2),
-          blurRadius: 8,
-          offset: Offset(0, -2),
-        ),
-      ],
-    ),
-    child: BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.white,
-      selectedItemColor: Colors.orange,
-      unselectedItemColor: Colors.grey[600],
-      currentIndex: currentIndex,
-      onTap: onTap,
-      selectedFontSize: 12,
-      unselectedFontSize: 12,
-      elevation: 0,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: "Home",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart_outlined),
-          activeIcon: Icon(Icons.shopping_cart),
-          label: "Cart",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          activeIcon: Icon(Icons.favorite),
-          label: "Favorite",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: "Profile",
-        ),
-      ],
-    ),
-  );
-}
-  
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.2),
+            blurRadius: 8,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey[600],
+        currentIndex: currentIndex,
+        onTap: onTap,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        elevation: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            activeIcon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            activeIcon: Icon(Icons.favorite),
+            label: "Favorite",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: "Profile",
+          ),
+        ],
+      ),
+    );
+  }
+
   RefreshIndicator _homeBody(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: () async {
-          await context.read<ProductCubit>().getAllProducts();
+      onRefresh: () async {
+        await context.read<ProductCubit>().getAllProducts();
+      },
+      color: const Color(0xFFFF5722),
+      child: BlocBuilder<ProductCubit, ProductState>(
+        builder: (context, state) {
+          if (state is ProductInitial) {
+            return _buildInitialState();
+          } else if (state is ProductLoading) {
+            return _buildLoadingState();
+          } else if (state is ProductLoaded) {
+            return _buildLoadedState(state.products);
+          } else if (state is ProductError) {
+            return _buildErrorState(state.message);
+          }
+          return const SizedBox.shrink();
         },
-        color: const Color(0xFFFF5722),
-        child: BlocBuilder<ProductCubit, ProductState>(
-          builder: (context, state) {
-            if (state is ProductInitial) {
-              return _buildInitialState();
-            } else if (state is ProductLoading) {
-              return _buildLoadingState();
-            } else if (state is ProductLoaded) {
-              return _buildLoadedState(state.products);
-            } else if (state is ProductError) {
-              return _buildErrorState(state.message);
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-      );
+      ),
+    );
   }
 
   Widget _buildInitialState() {
@@ -243,11 +231,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   }
 
   Widget _buildLoadingState() {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemCount: 8,
-      itemBuilder: (context, index) => LoadingWidget(),
-    );
+    return HomeLoadingWidget();
   }
 
   Widget _buildEmptyState() {
@@ -383,19 +367,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     );
   }
 
-
-  void _onBuyNow(ProductEntity product) {
-    // TODO: go buy
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Proceeding to buy ${product.title}'),
-        backgroundColor: const Color(0xFFFF5722),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
   Widget _buildLoadedState(List<ProductEntity> products) {
     if (products.isEmpty) {
       return _buildEmptyState();
@@ -457,6 +428,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 const SizedBox(height: 16),
                 //! Search
                 TextField(
+                  readOnly: true,
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchView(),
+                        ),
+                      ),
                   decoration: InputDecoration(
                     hintText: 'Search products...',
                     prefixIcon: const Icon(Icons.search),
@@ -510,7 +489,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     },
                   ),
                 ),
-              
               ],
             ),
           ),
@@ -566,6 +544,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               return VerticalProductCard(
                 product: product,
                 onAddToCart: () => Utils.onAddToCart(context, product: product),
+                onBuyNow: () => Utils.onBuyNow(context, product: product),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -585,74 +564,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             ),
           ),
         ),
-
       ],
-    );
-  }
-}
-
-class LoadingWidget extends StatefulWidget {
-  const LoadingWidget({super.key});
-
-  @override
-  State<LoadingWidget> createState() => _LoadingWidgetState();
-}
-
-class _LoadingWidgetState extends State<LoadingWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: List.generate(6, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.grey[300]!,
-                        Colors.grey[100]!,
-                        Colors.grey[300]!,
-                      ],
-                      stops: [
-                        (_controller.value - 0.3).clamp(0.0, 1.0),
-                        _controller.value,
-                        (_controller.value + 0.3).clamp(0.0, 1.0),
-                      ],
-                      begin: const Alignment(-1, -0.3),
-                      end: const Alignment(2, 0.3),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        }),
-      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:shopping_app/core/widgets/h_product_card.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_state.dart';
-import 'package:shopping_app/features/products/presentation/widgets/search.dart';
+import 'package:shopping_app/features/products/presentation/widgets/products_loading.dart';
 
 class ProductView extends StatelessWidget {
   static const String routeName = "ProductView";
@@ -91,19 +91,6 @@ class _ProductViewBodyState extends State<ProductViewBody> {
           color: Color(0xFF2D3748),
         ),
       ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProductSearchScreen(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.search_rounded),
-        ),
-      ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Container(height: 1, color: Colors.grey.withValues(alpha: 0.2)),
@@ -132,97 +119,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
   }
 
   Widget _buildLoadingState() {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemCount: 8,
-      itemBuilder: (context, index) => _buildShimmerCard(),
-    );
-  }
-
-  Widget _buildShimmerCard() {
-    return Container(
-      height: 140,
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.08),
-            spreadRadius: 0,
-            blurRadius: 12,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Image shimmer
-          Container(
-            width: 120,
-            decoration: const BoxDecoration(
-              color: Color(0xFFF1F5F9),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
-            ),
-          ),
-          // Content shimmer
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 20,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 16,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F5F9),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        height: 36,
-                        width: 36,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return ProductsLoading();
   }
 
   Widget _buildLoadedState(
@@ -265,7 +162,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF5722).withValues(alpha:  0.1),
+                  color: const Color(0xFFFF5722).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -281,7 +178,7 @@ class _ProductViewBodyState extends State<ProductViewBody> {
           ),
         ),
 
-        //! Products 
+        //! Products
         Expanded(
           child: ListView.builder(
             controller: _scrollController,
@@ -297,7 +194,6 @@ class _ProductViewBodyState extends State<ProductViewBody> {
             },
           ),
         ),
-      
       ],
     );
   }

@@ -41,9 +41,10 @@ class AboutDeveloperView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         title: const Text("About Developer"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.black38,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

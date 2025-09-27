@@ -92,7 +92,7 @@ class _CategoryState extends State<Category>
                 ),
                 child: ClipOval(
                   child: widget.imageUrl.isNotEmpty
-                      ? Image.network(
+                      ? Image.asset(
                           widget.imageUrl,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>

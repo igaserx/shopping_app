@@ -3,6 +3,9 @@ class EndPoints
 {
    static const String baseUrl = "https://dummyjson.com/";
    static const String product = "products"; 
+   static const String category = "category"; 
+   static const String search = "search"; 
+   static const String query = "q"; 
 }
 class ApiKeys {
   static const String id = "id";

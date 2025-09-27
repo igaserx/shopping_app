@@ -14,6 +14,7 @@ import 'package:shopping_app/features/products/data/repositories/product_reposit
 import 'package:shopping_app/features/products/domain/repositories/products_repo.dart';
 import 'package:shopping_app/features/products/domain/usecases/get_all_products_usecase.dart';
 import 'package:shopping_app/features/products/domain/usecases/get_product_by_category_usecase.dart';
+import 'package:shopping_app/features/products/presentation/cubits/cubit/search_cubit.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
 
 
@@ -65,4 +66,10 @@ Future<void> init() async {
       getProductByCategoryUsecase: di(),
     ),
   );
+  di.registerFactory(
+    () => ProductSearchCubit(
+      productRepository: di(),
+    ),
+  );
+
 }

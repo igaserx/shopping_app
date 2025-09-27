@@ -39,3 +39,7 @@ flutter:
   assets:
     - assets/
     - lang/
+  fonts:
+    - family: Suwannaphum
+      fonts:
+        - asset: assets/fonts/Suwannaphum-Regular.ttf

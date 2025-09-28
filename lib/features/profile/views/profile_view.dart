@@ -1,4 +1,6 @@
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
@@ -45,7 +47,7 @@ class ProfileContent extends StatelessWidget {
             return _buildErrorState(context, state.message);
           }
           
-          return _buildErrorState(context, 'Something went wrong');
+          return _buildErrorState(context, "Something_went_wrong".tr());
         },
       ),
     );
@@ -54,8 +56,8 @@ class ProfileContent extends StatelessWidget {
   AppBar _buildAppBar() {
     return AppBar(
       centerTitle: true,
-      title: const Text(
-        'Profile',
+      title: Text(
+        'Profile'.tr(),
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -128,10 +130,19 @@ class ProfileContent extends StatelessWidget {
             child: _buildInitialsAvatar(profile),
           ),
           const SizedBox(height: 16),
-          
+          Text(
+            FirebaseAuth.instance.currentUser!.displayName! ,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3748),
+            ),
+            textAlign: TextAlign.center,
+          ),
           //! Email
           Text(
             profile.email,
+            maxLines: 1,
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -151,7 +162,7 @@ class ProfileContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Member since ${_formatDate(profile.createdAt!)}',
+                'member_since'.tr(namedArgs: {'date': _formatDate(profile.createdAt!)}),
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -196,8 +207,8 @@ class ProfileContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Quick Actions',
+              Text(
+                "Quick_Actions".tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -207,16 +218,16 @@ class ProfileContent extends StatelessWidget {
               const SizedBox(height: 16),
                   _buildActionItem(
               icon: Icons.language,
-              title: 'Change Language',
-              subtitle: 'Select app language',
+              title: "Change_Language".tr(),
+              subtitle: "Select_app_language".tr(),
               onTap: () {
                 showLanguageDialog(context);
               },
             ),
                 _buildActionItem(
               icon: Icons.email_outlined,
-              title: 'Contact Developer',
-              subtitle: 'Send us your feedback',
+              title: "Contact_Developer".tr(),
+              subtitle: "Send_us_your_feedback".tr(),
               onTap: () {
                 Navigator.push(
                   context,
@@ -238,7 +249,7 @@ class ProfileContent extends StatelessWidget {
           child: OutlinedButton.icon(
             onPressed: () => _showSignOutDialog(context),
             icon: const Icon(Icons.logout),
-            label: const Text('Sign Out'),
+            label: Text("Sign_Out".tr()),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.red,
               side: const BorderSide(color: Colors.red),
@@ -294,7 +305,7 @@ class ProfileContent extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Something went wrong',
+            "Something_went_wrong".tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -315,8 +326,8 @@ class ProfileContent extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFF5722),
             ),
-            child: const Text(
-              'Try Again',
+            child: Text(
+              "Try_Again".tr(),
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -342,12 +353,12 @@ class ProfileContent extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
+        title: Text('Sign_Out'.tr()),
+        content: Text("Are_you_sure_you_want_to_sign_out".tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -358,8 +369,8 @@ class ProfileContent extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
             ),
-            child: const Text(
-              'Sign Out',
+            child:  Text(
+              'Sign_Out'.tr(),
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -376,13 +387,13 @@ Future<void> showLanguageDialog(BuildContext context) async {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text("Choose Language"),
+        title: Text("Choose_Language".tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: const Icon(Icons.language),
-              title: const Text("English"),
+              title: Text("English".tr()),
               onTap: () {
                 Utils.changeToEnglish(context);
                 Navigator.pop(context, "en");

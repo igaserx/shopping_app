@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/custom_snack_bar.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_state.dart';
 import 'package:shopping_app/features/auth/presentation/views/sign_in_view.dart';
 import 'package:shopping_app/features/auth/presentation/widgets/cutom_buttom.dart';
+import 'package:shopping_app/features/products/presentation/views/home_view.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -19,18 +21,21 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  // bool _signup = false;
+  
   // Controllers.
-  final _emailController = TextEditingController(),
+  final _fullNameController = TextEditingController(),
+      _emailController = TextEditingController(),
       _passwordController = TextEditingController(),
       _confirmPasswordController = TextEditingController();
   // Focus Nodes.
-  final FocusNode _emailFocusNode = FocusNode(),
+  final FocusNode _fullNameFocusNode = FocusNode(),
+      _emailFocusNode = FocusNode(),
       _passwordFocusNode = FocusNode(),
       _confirmPasswordFocusNode = FocusNode();
   @override
   void dispose() {
     super.dispose();
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -40,15 +45,7 @@ class _SignUpViewState extends State<SignUpView> {
     Navigator.of(context).pushReplacementNamed(SignInView.routeName);
   }
 
-  // _fakeSignup() async {
-  //   setState(() {
-  //     _signup = true;
-  //   });
-  //   await Future.delayed(Duration(seconds: 3));
-  //   setState(() {
-  //     _signup = false;
-  //   });
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +56,7 @@ class _SignUpViewState extends State<SignUpView> {
           listener: (context, state) {
             if (state is AuthLoading) {
             } else if (state is Authenticated) {
-              Navigator.pushReplacementNamed(context, SignInView.routeName);
-              CustomSnackBar.show(
-                context,
-                "account_created_successfully_please_sign_in".tr(),
-                type: SnackBarType.success,
-                duration: Duration(seconds: 3),
-              );
+              Utils.showSuccesDialog(context,message:  "Account_created_successfully".tr(), goTo: HomeView.routeName );
             } else if (state is AuthError) {
               CustomSnackBar.show(
                 context,
@@ -102,7 +93,33 @@ class _SignUpViewState extends State<SignUpView> {
                       style: GoogleFonts.robotoCondensed(fontSize: 18),
                     ),
                     SizedBox(height: 50),
-
+                    // Full Name
+                     Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: TextField(
+                            controller: _fullNameController,
+                            focusNode: _fullNameFocusNode,
+                            onSubmitted: (_) {
+                              FocusScope.of(
+                                context,
+                              ).requestFocus(_emailFocusNode);
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Full_Name".tr(),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 14),
                     // Email Textfield
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -132,7 +149,7 @@ class _SignUpViewState extends State<SignUpView> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 14),
 
                     // Password Textfield
                     Padding(
@@ -172,7 +189,7 @@ class _SignUpViewState extends State<SignUpView> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 14),
                    
                     // confirm Password Textfield
                     Padding(
@@ -208,7 +225,7 @@ class _SignUpViewState extends State<SignUpView> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 32),
 
                     // sign in buttom
                     Padding(
@@ -221,6 +238,7 @@ class _SignUpViewState extends State<SignUpView> {
                         text: isLoading ? "loading".tr() : "create".tr(),
                         onTap: () {
                           context.read<AuthCubit>().signUp(
+                            _fullNameController.text.trim(),
                             _emailController.text.trim(),
                             _passwordController.text.trim(),
                             _confirmPasswordController.text.trim(),
@@ -263,4 +281,8 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
+
+
+
+
 }

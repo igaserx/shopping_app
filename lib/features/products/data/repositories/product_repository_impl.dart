@@ -1,5 +1,3 @@
-import 'package:shopping_app/core/errors/error_model.dart';
-import 'package:shopping_app/core/errors/exceptions.dart';
 import 'package:shopping_app/features/products/data/data_sources/data_source.dart';
 import 'package:shopping_app/features/products/data/models/product_model.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';

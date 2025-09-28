@@ -26,6 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserEntity> signUp({
+    required String fullName,
     required String email,
     required String password,
     required String confirmPassword,
@@ -34,7 +35,7 @@ class AuthRepositoryImpl implements AuthRepository {
       email: email,
       password: password,
     );
-
+    await userCredential.user!.updateDisplayName(fullName);
     final user = userCredential.user;
     if (user == null) throw Exception('User not created');
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
@@ -38,8 +39,8 @@ class CartView extends StatelessWidget {
       elevation: 0,
       backgroundColor: Colors.white,
       foregroundColor: const Color(0xFF2D3748),
-      title: const Text(
-        "Cart",
+      title:  Text(
+        "Cart".tr(),
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
       actions: [
@@ -49,7 +50,7 @@ class CartView extends StatelessWidget {
               return IconButton(
                 onPressed: () => _showClearCartDialog(context),
                 icon: const Icon(Icons.delete_outline),
-                tooltip: "Clear Cart",
+                tooltip: "Clear_Cart".tr(),
               );
             }
             return const SizedBox.shrink();
@@ -84,7 +85,7 @@ class CartView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'Your Cart is Empty',
+            "Your_Cart_is_Empty".tr(),
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -93,7 +94,7 @@ class CartView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Add some items to get started',
+            "Add_some_items_to_get _started".tr(),
             style: TextStyle(fontSize: 16, color: Colors.grey[500]),
           ),
         ],
@@ -141,7 +142,7 @@ class CartView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$itemCount ${itemCount == 1 ? 'item' : 'items'} in your cart',
+                    "itmes_in_your_cart".plural(itemCount),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -149,7 +150,7 @@ class CartView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Ready for checkout',
+                  "Ready_for_checkout".tr(),
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                 ),
               ],
@@ -163,7 +164,7 @@ class CartView extends StatelessWidget {
               border: Border.all(color: Colors.green[200]!),
             ),
             child: Text(
-              'Free Shipping',
+              "Free_Shipping".tr(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -433,7 +434,7 @@ class CartView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Subtotal ($itemCount items)',
+               'subtotal_items'.tr(namedArgs: {'count': itemCount.toString()}),
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
 
@@ -447,12 +448,12 @@ class CartView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Shipping',
+                "Shipping".tr(),
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               Text(
                 shippingCost == 0
-                    ? 'Free'
+                    ? "Free".tr()
                     : '\$${shippingCost.toStringAsFixed(2)}',
                 style: TextStyle(
                   fontSize: 14,
@@ -469,8 +470,8 @@ class CartView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Total',
+              Text(
+                "Total".tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -496,8 +497,8 @@ class CartView extends StatelessWidget {
         onPressed:
             state.items.isNotEmpty ? () => Utils.onProceedingToBuy(context) : null,
         icon: const Icon(Icons.shopping_cart_checkout),
-        label: const Text(
-          'Proceed to Checkout',
+        label: Text(
+          "Proceed_to_Checkout".tr(),
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         style: ElevatedButton.styleFrom(
@@ -523,8 +524,8 @@ class CartView extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text('Clear Cart'),
-            content: const Text("Are you sure?"),
+            title:  Text("Clear_Cart").tr(),
+            content:  Text("Are_you_sure".tr()),
             actions: [
               //! Cancel
               TextButton(
@@ -532,7 +533,7 @@ class CartView extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                 ),
-                child: const Text('Cancel'),
+                child: Text("Cancel".tr()),
               ),
               //! Clear
               ElevatedButton(
@@ -541,7 +542,7 @@ class CartView extends StatelessWidget {
                   Navigator.pop(context);
                   CustomSnackBar.show(
                     context,
-                    "Cart cleared successfully",
+                    "Cart_cleared_successfully".tr(),
                     type: SnackBarType.success,
                   );
                 },
@@ -550,7 +551,7 @@ class CartView extends StatelessWidget {
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white
                     ).copyWith(),
-                child: const Text('Clear All'),
+                child: Text("Clear_All".tr()),
               ),
             ],
           ),
@@ -566,8 +567,8 @@ class CartView extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text('Remove Item'),
-            content: Text('Remove "${item.product.title}" from your cart?'),
+            title: Text("Remove_Item".tr()),
+            content: Text("remove_from_cart".tr(args: [item.product.title])),
             actions: [
               //! Cancel
               TextButton(
@@ -575,7 +576,7 @@ class CartView extends StatelessWidget {
                   foregroundColor: Colors.black
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text("Cancel".tr()),
               ),
               //! Remove
               ElevatedButton(
@@ -584,7 +585,7 @@ class CartView extends StatelessWidget {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${item.product.title} removed from cart'),
+                      content: Text("remove_from_cart".tr(args: [item.product.title])),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -596,14 +597,10 @@ class CartView extends StatelessWidget {
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Remove'),
+                child: Text("Remove".tr()),
               ),
             ],
           ),
     );
-  }
-
-  void _proceedToCheckout(BuildContext context) {
-    // TODO
   }
 }

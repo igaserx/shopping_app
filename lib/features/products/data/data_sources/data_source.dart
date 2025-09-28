@@ -3,7 +3,6 @@ import 'package:shopping_app/core/database/apis/end_points.dart';
 import 'package:shopping_app/core/errors/error_model.dart';
 import 'package:shopping_app/core/errors/exceptions.dart';
 import 'package:shopping_app/features/products/data/models/product_model.dart';
-import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 abstract class ProductRemoteDataSource {
   Future<List<Map<String, dynamic>>> getAllProducts();
   Future<List<Map<String, dynamic>>> getProductByCategory(List<String> categories);
@@ -17,7 +16,7 @@ class ProductRemoteDatasourcesImpl extends ProductRemoteDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getAllProducts() async {
-    final response = await api.get("${EndPoints.product}?limit=250"); 
+    final response = await api.get("${EndPoints.product}?limit=194"); 
     final products = response[EndPoints.product] as List<dynamic>;
     return List<Map<String, dynamic>>.from(products);
   }

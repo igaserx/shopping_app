@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/DI/di.dart';
@@ -7,20 +8,19 @@ import 'package:shopping_app/features/products/data/models/banner_item.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_cubit.dart';
 import 'package:shopping_app/features/products/presentation/cubits/prduct_state.dart';
+import 'package:shopping_app/features/products/presentation/views/all_products_view.dart';
+import 'package:shopping_app/features/products/presentation/widgets/hot_offers.dart';
 import 'package:shopping_app/features/products/presentation/views/product_details.dart';
-import 'package:shopping_app/features/products/presentation/views/products_view.dart';
-import 'package:shopping_app/features/products/presentation/widgets/category.dart';
 import 'package:shopping_app/core/widgets/v_product_card.dart';
 import 'package:shopping_app/features/products/presentation/widgets/home_loading_widget.dart';
-import 'package:shopping_app/features/products/presentation/widgets/sales_banner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shopping_app/features/products/presentation/views/search_view.dart';
+import 'package:shopping_app/features/products/presentation/widgets/top_picks.dart';
 import 'package:shopping_app/features/profile/views/profile_view.dart';
 import '../../../../core/utils/utils.dart';
 
-const Map<String, List<String>> mainCategories = {
-  "Electronics": ["smartphones", "laptops"],
-  "Fashion": [
+ Map<String, List<String>> mainCategories = {
+  "Electronics".tr() : ["smartphones", "laptops"],
+  "Fashion".tr(): [
     "tops",
     "womens-dresses",
     "womens-shoes",
@@ -32,35 +32,35 @@ const Map<String, List<String>> mainCategories = {
     "womens-jewellery",
     "sunglasses",
   ],
-  "Home": ["home-decoration", "furniture", "lighting"],
-  "Food": ["groceries"],
-  "Beauty & Health": ["fragrances", "skincare"],
-  "Automotive": ["automotive", "motorcycle"],
+  "Furniture".tr(): ["home-decoration", "furniture", "lighting"],
+  "groceries".tr(): ["groceries"],
+  "Beauty_Health".tr(): ["fragrances", "skincare"],
+  "Automotive".tr(): ["automotive", "motorcycle"],
 };
 
 final List<Map<String, String>> categoriesData = [
-  {"name": "Electronics", "imageUrl": "assets/electroinc.png"},
-  {"name": "Fashion", "imageUrl": "assets/fashion.png"},
-  {"name": "Home", "imageUrl": "assets/home.png"},
-  {"name": "Food", "imageUrl": "assets/food.png"},
-  {"name": "Beauty & Health", "imageUrl": "assets/beauty.png"},
-  {"name": "Automotive", "imageUrl": "assets/automotive.png"},
+  {"name": "Electronics".tr(), "imageUrl": "assets/electroinc.png"},
+  {"name": "Fashion".tr(), "imageUrl": "assets/fashion.png"},
+  {"name": "Furniture".tr(), "imageUrl": "assets/home.png"},
+  {"name": "groceries".tr(), "imageUrl": "assets/food.png"},
+  {"name": "Beauty_Health".tr(), "imageUrl": "assets/beauty.png"},
+  {"name": "Automotive".tr(), "imageUrl": "assets/automotive.png"},
 ];
 
 final List<BannerItem> bannersData = [
-  const BannerItem(
-    title: "Welcome to our Shopping app!",
-    subtitle: "Find everything you need in one place.",
+  BannerItem(
+    title: "Welcome_to_our_Shopping_app".tr(),
+    subtitle: "Find_everything_you_need_in_one_place".tr(),
     imageUrl: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png",
   ),
-  const BannerItem(
-    title: "Discover New Products",
-    subtitle: "Browse our latest and greatest items.",
+  BannerItem(
+    title: "Discover_New_Products".tr(),
+    subtitle: "Browse_our_latest_and_greatest_items".tr(),
     imageUrl: "https://cdn-icons-png.flaticon.com/512/1170/1170576.png",
   ),
-  const BannerItem(
-    title: "Enjoy Fast Delivery",
-    subtitle: "Get your orders delivered quickly and safely.",
+   BannerItem(
+    title: "Enjoy_Fast_Delivery".tr(),
+    subtitle: "Get_your_orders_delivered_quickly_and_safely".tr(),
     imageUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046857.png",
   ),
 ];
@@ -71,69 +71,55 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String userEmail = FirebaseAuth.instance.currentUser?.email ?? 'User';
-    final String userName = userEmail.split('@')[0];
+    
 
     return BlocProvider(
       create: (context) => di<ProductCubit>()..getAllProducts(),
-      child: HomeViewBody(userName: userName),
+      child: HomeViewBody(),
     );
   }
 }
 
 class HomeViewBody extends StatefulWidget {
-  const HomeViewBody({super.key, required this.userName});
+  const HomeViewBody({super.key,});
 
-  final String userName;
 
   @override
   State<HomeViewBody> createState() => _HomeViewBodyState();
 }
 
 class _HomeViewBodyState extends State<HomeViewBody> {
-  final ScrollController _scrollController = ScrollController();
   int _currentIndex = 0;
-  final PageController _pageController = PageController();
+   final _pages = [
+    HomeContent(),
+    CartView(),
+    FavoriteView(),
+    ProfileView(),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
+        body:AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
           },
-          children: [
-            _homeBody(context),
-            CartView(),
-            FavoriteView(),
-            ProfileView(),
-          ],
+          child: IndexedStack(
+            key: ValueKey<int>(_currentIndex),
+            index: _currentIndex,
+            children: _pages,
+          ),
         ),
         bottomNavigationBar: _buildBottombar(_currentIndex, (index) {
           setState(() {
             _currentIndex = index;
           });
-          _pageController.animateToPage(
-            index,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
         }),
       ),
     );
@@ -165,60 +151,81 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
-            label: "Home",
+            label: "Home".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),
             activeIcon: Icon(Icons.shopping_cart),
-            label: "Cart",
+            label: "Cart".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border),
             activeIcon: Icon(Icons.favorite),
-            label: "Favorite",
+            label: "Favorite".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
-            label: "Profile",
+            label: "Profile".tr(),
           ),
         ],
       ),
     );
   }
 
-  RefreshIndicator _homeBody(BuildContext context) {
+}
+
+
+class HomeContent extends StatefulWidget{
+  
+  const HomeContent({super.key});
+
+  @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  final fullName = FirebaseAuth.instance.currentUser?.displayName ?? 'User';
+  
+  @override
+  Widget build(BuildContext context) {
+    
     return RefreshIndicator(
       onRefresh: () async {
         await context.read<ProductCubit>().getAllProducts();
       },
       color: const Color(0xFFFF5722),
-      child: BlocBuilder<ProductCubit, ProductState>(
-        builder: (context, state) {
-          if (state is ProductInitial) {
-            return _buildInitialState();
-          } else if (state is ProductLoading) {
-            return _buildLoadingState();
-          } else if (state is ProductLoaded) {
-            return _buildLoadedState(state.products);
-          } else if (state is ProductError) {
-            return _buildErrorState(state.message);
-          }
-          return const SizedBox.shrink();
-        },
-      ),
+      child: Scaffold(
+        appBar: AppBar(title: Text("Our_Products".tr(),),
+        elevation: 0,
+        ),
+        body: BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            if (state is ProductInitial) {
+              return _buildInitialState();
+            } else if (state is ProductLoading) {
+              return _buildLoadingState();
+            } else if (state is ProductLoaded) {
+              return _buildLoadedState(state.products);
+            } else if (state is ProductError) {
+              return _buildErrorState(state.message);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      )
     );
   }
 
   Widget _buildInitialState() {
-    return const Center(
+    return  Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.shopping_bag_outlined, size: 80, color: Colors.grey),
           SizedBox(height: 16),
-          Text(
-            'Ready to browse products!',
+           Text(
+            "Ready_to_browse_products".tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.grey,
@@ -254,7 +261,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           ),
           const SizedBox(height: 24),
           Text(
-            'No Products Found',
+            "No_Products_Found".tr(),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -263,7 +270,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           ),
           const SizedBox(height: 8),
           Text(
-            'We couldn\'t find any products at the moment.',
+            "We_could_not_find_any_products_at_the_moment".tr(),
             style: TextStyle(fontSize: 16, color: Colors.grey[500]),
             textAlign: TextAlign.center,
           ),
@@ -271,7 +278,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           ElevatedButton.icon(
             onPressed: () => context.read<ProductCubit>().getAllProducts(),
             icon: const Icon(Icons.refresh),
-            label: const Text('Refresh'),
+            label: Text("Refresh".tr()),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFF5722),
               foregroundColor: Colors.white,
@@ -308,7 +315,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Oops! Something went wrong',
+              "Oops_Something_went_wrong".tr(),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -328,7 +335,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 OutlinedButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back),
-                  label: const Text('Go Back'),
+                  label: Text("Go_Back".tr()),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.grey[600],
                     side: BorderSide(color: Colors.grey[300]!),
@@ -346,7 +353,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   onPressed:
                       () => context.read<ProductCubit>().getAllProducts(),
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Try Again'),
+                  label: Text("Try_Again".tr()),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF5722),
                     foregroundColor: Colors.white,
@@ -374,138 +381,36 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
     return CustomScrollView(
       slivers: [
-        //! Orange Background
+        //! Top Picks
         SliverToBoxAdapter(
-          child: Container(
-            height: MediaQuery.sizeOf(context).height * 0.39,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 24.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(
+            "Top_Picks".tr(),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
             ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFFBF360C),
-                  const Color(0xFFE64A19),
-                  const Color(0xFFFF5722),
-                ],
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //! Welcome
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Hello, ${widget.userName}!",
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(color: Colors.white),
-                          ),
-                          Text(
-                            "Let's find your favorite items",
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white.withValues(alpha: 0.8),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                //! Search
-                TextField(
-                  readOnly: true,
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SearchView(),
-                        ),
-                      ),
-                  decoration: InputDecoration(
-                    hintText: 'Search products...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                //! Categories
-                Text(
-                  "Shop by Category",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(color: Colors.white),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categoriesData.length,
-                    itemBuilder: (context, index) {
-                      final category = categoriesData[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Category(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              ProductView.routeName,
-                              arguments: {
-                                "name": category["name"],
-                                "category":
-                                    mainCategories["${category["name"]}"],
-                              },
-                            );
-                          },
-                          imageUrl: category['imageUrl']!,
-                          categoryName: category['name']!,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ),  
+        ),
         ),
 
-        // ! Sales Banner
+        //! PageView
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 16.0,
-            ),
-            child: SalesBanner(banners: bannersData),
-          ),
+          child: SizedBox(
+            height : 200,
+            child: FeaturedProductsWidget(
+                products: products,),
+          )
         ),
 
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        SliverToBoxAdapter(child: SizedBox(height: 24,)),
+       
+        SliverToBoxAdapter(
+          child: HotOffersWidget(offers: products,))
+        ,
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
         // ! Popular Products
         SliverToBoxAdapter(
@@ -513,17 +418,23 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: InkWell(
               onTap: () {
-                // Todo : see all products
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => AllProductsView(products: products,),
+                    ),
+                  );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Popular Products",
+                    "Popular_Products".tr(),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
-                    "See All",
+                    "See_All".tr(),
                     style: Theme.of(
                       context,
                     ).textTheme.titleSmall?.copyWith(color: Colors.green),
@@ -538,7 +449,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         SliverPadding(
           padding: const EdgeInsets.all(8.0),
           sliver: SliverGrid.builder(
-            itemCount: products.length,
+            itemCount: 20,
             itemBuilder: (context, index) {
               final product = products[index];
               return VerticalProductCard(
@@ -568,3 +479,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     );
   }
 }
+  
+  
+

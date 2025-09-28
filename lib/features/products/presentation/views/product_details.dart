@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/discount_widget.dart';
 import 'package:shopping_app/core/widgets/favorite_button.dart';
 import 'package:shopping_app/core/widgets/price_widget.dart';
-import 'package:shopping_app/features/favorite/cubits/favorite_cubit.dart';
 import 'package:shopping_app/features/products/domain/entities/product_entity.dart';
 import 'package:shopping_app/features/products/domain/entities/subEntities/review_entity.dart';
 class ProductDetailsView extends StatefulWidget {

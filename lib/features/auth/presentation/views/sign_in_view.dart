@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shopping_app/core/utils/utils.dart';
 import 'package:shopping_app/core/widgets/custom_snack_bar.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:shopping_app/features/auth/presentation/cubits/auth_state.dart';
@@ -49,8 +50,7 @@ class _SignInViewState extends State<SignInView> {
              CustomSnackBar.show(context,state.message,type: SnackBarType.error);
             }
             if (state is Authenticated) {
-              Navigator.of(context).pushReplacementNamed(HomeView.routeName);
-              CustomSnackBar.show(context,"successfully_sign_in".tr(),type: SnackBarType.success);
+              Utils.showSuccesDialog(context, message: "successfully_sign_in".tr(), goTo: HomeView.routeName);
             }
           },
           builder: (context, state) {

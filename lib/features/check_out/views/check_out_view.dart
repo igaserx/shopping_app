@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
@@ -19,7 +20,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
-  String _selectedPayment = 'Cash on Delivery';
+  String _selectedPayment = "Cash_on_Delivery".tr();
 
   @override
   void dispose() {
@@ -71,8 +72,8 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text(
-        'Checkout',
+      title:  Text(
+        'Checkout'.tr(),
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -103,7 +104,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Your cart is empty',
+            "Your_Cart_is_Empty".tr(),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -117,7 +118,7 @@ class _CheckoutViewState extends State<CheckoutView> {
               backgroundColor: const Color(0xFFFF5722),
               foregroundColor: Colors.white,
             ),
-            child: const Text('Continue Shopping'),
+            child: Text("Continue_Shopping".tr()),
           ),
         ],
       ),
@@ -167,8 +168,8 @@ class _CheckoutViewState extends State<CheckoutView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Order Summary',
+           Text(
+            "Order_Summary".tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -211,8 +212,8 @@ class _CheckoutViewState extends State<CheckoutView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Total Amount',
+               Text(
+                "Total Amount".tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -244,8 +245,8 @@ class _CheckoutViewState extends State<CheckoutView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Shipping Information',
+          Text(
+            "Shipping_Information".tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -257,8 +258,8 @@ class _CheckoutViewState extends State<CheckoutView> {
           TextFormField(
             controller: _addressController,
             decoration: InputDecoration(
-              labelText: 'Delivery Address',
-              hintText: 'Enter your full address',
+              labelText: "Delivery_Address".tr(),
+              hintText: "Enter_your_full_address".tr(),
               prefixIcon: const Icon(Icons.location_on_outlined),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -271,7 +272,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             maxLines: 1,
             validator: (value) {
               if (value?.isEmpty ?? true) {
-                return 'Please enter your address';
+                return "Please_enter_your_address".tr();
               }
               return null;
             },
@@ -282,8 +283,8 @@ class _CheckoutViewState extends State<CheckoutView> {
           TextFormField(
             controller: _phoneController,
             decoration: InputDecoration(
-              labelText: 'Phone Number',
-              hintText: 'Enter your phone number',
+              labelText: "Phone_Number".tr(),
+              hintText: "Enter_your_phone_number".tr(),
               prefixIcon: const Icon(Icons.phone_outlined),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -296,7 +297,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             keyboardType: TextInputType.phone,
             validator: (value) {
               if (value?.isEmpty ?? true) {
-                return 'Please enter your phone number';
+                return "Please_enter_your_phone_number".tr();
               }
               return null;
             },
@@ -323,8 +324,8 @@ class _CheckoutViewState extends State<CheckoutView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Payment Method',
+           Text(
+            "Payment_Method".tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -341,8 +342,8 @@ RadioGroup<String>(
     });
   },
   child: RadioListTile<String>(
-    value: "Cash on Delivery",
-    title: const Text("Cash on Delivery"),
+    value: "Cash_on_Delivery".tr(),
+    title: Text("Cash_on_Delivery".tr()),
     contentPadding: EdgeInsets.zero,
     activeColor: const Color(0xFFFF5722),
   ),
@@ -381,8 +382,8 @@ RadioGroup<String>(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : const Text(
-                'Place Order',
+            : Text(
+                "Place_Order".tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -429,8 +430,8 @@ RadioGroup<String>(
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Order Placed Successfully!',
+             Text(
+              "Order_Placed_Successfully".tr(),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -439,7 +440,7 @@ RadioGroup<String>(
             ),
             const SizedBox(height: 16),
             Text(
-              'Your order #$orderId has been placed successfully. We will contact you soon.',
+                'order_placed'.tr(namedArgs: {'orderId': orderId.toString()}),
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -460,8 +461,8 @@ RadioGroup<String>(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Back to Home',
+                child:  Text(
+                  "Back_to_Home".tr(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),

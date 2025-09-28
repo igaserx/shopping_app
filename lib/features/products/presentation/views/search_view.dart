@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/DI/di.dart';
@@ -50,9 +51,7 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: const Text('Product Search'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: Text("Product_Search".tr()),
         elevation: 1,
       ),
       body: Padding(
@@ -76,7 +75,7 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
           context.read<ProductSearchCubit>().searchProducts(query);
         },
         decoration: InputDecoration(
-          hintText: 'Search products...',
+          hintText: "Products_Search".tr(),
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -97,9 +96,9 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
     return BlocBuilder<ProductSearchCubit, ProductSearchState>(
       builder: (context, state) {
         if (state is ProductSearchInitial) {
-          return const Center(
+          return Center(
             child: Text(
-              'Start typing to search for products.',
+              'Start_typing_to_search_for_products'.tr(),
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -138,7 +137,7 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
                   onPressed: () {
                     context.read<ProductSearchCubit>().clearSearch();
                   },
-                  child: const Text('Try Again'),
+                  child: Text('Try_Again'.tr()),
                 ),
               ],
             ),
@@ -147,7 +146,7 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
 
         if (state is ProductSearchLoaded) {
           if (state.products.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -158,7 +157,7 @@ class _ProductSearchBodyState extends State<ProductSearchBody> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'No products found.',
+                    'No_Products_Found'.tr(),
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,

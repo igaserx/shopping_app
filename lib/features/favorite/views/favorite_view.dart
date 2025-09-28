@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/utils.dart';
@@ -54,7 +55,7 @@ class FavoriteView extends StatelessWidget {
       title: BlocBuilder<FavoritesCubit, FavoritesState>(
         builder: (context, state) {
           return Text(
-            "Favorites",
+            "Favorites".tr(),
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -72,7 +73,7 @@ class FavoriteView extends StatelessWidget {
               return IconButton(
                 onPressed: () => _showClearFavoritesDialog(context),
                 icon: const Icon(Icons.clear_all),
-                tooltip: 'Clear all favorites',
+                tooltip: "Clear_all_favorites".tr(),
               );
             }
             return const SizedBox.shrink();
@@ -110,7 +111,7 @@ class FavoriteView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'No Favorites Yet',
+            "No_Favorites_Yet".tr(),
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -119,7 +120,7 @@ class FavoriteView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Start adding products you love',
+            "Start_adding_products_you_love".tr(),
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[500],
@@ -248,7 +249,7 @@ class FavoriteView extends StatelessWidget {
                   
                   //! date
                   Text(
-                    'Added ${_formatDate(favorite.addedAt)}',
+                    'added_on'.tr(namedArgs: {'date': _formatDate(favorite.addedAt)}),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[500],
@@ -264,11 +265,11 @@ class FavoriteView extends StatelessWidget {
                         child: ElevatedButton.icon(
                           onPressed: () {
                             Utils.onAddToCart(context, product: favorite.product);
-                           CustomSnackBar.show(context, "${favorite.product.title} added to cart!", type: SnackBarType.success);
+                           CustomSnackBar.show(context, "added_to_cart".tr(namedArgs: {"product": favorite.product.title}), type: SnackBarType.success);
                           },
                           icon: const Icon(Icons.shopping_cart_outlined, size: 16),
-                          label: const Text(
-                           "Add to Cart",
+                          label:  Text(
+                           "Add_to_Cart".tr(),
                             style: TextStyle(fontSize: 12),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -295,7 +296,7 @@ class FavoriteView extends StatelessWidget {
                           backgroundColor: Colors.red[50],
                           minimumSize: const Size(32, 32),
                         ),
-                        tooltip: 'Remove from favorites',
+                        tooltip: "Remove_from_favorites".tr(),
                       ),
                     
                     ],
@@ -313,17 +314,21 @@ class FavoriteView extends StatelessWidget {
     final now = DateTime.now();
     final difference = now.difference(date);
     
-    if (difference.inDays > 7) {
-      return '${date.day}/${date.month}/${date.year}';
-    } else if (difference.inDays > 0) {
-      return '${difference.inDays} days ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} hours ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minutes ago';
-    } else {
-      return 'Just now';
-    }
+ if (difference.inDays > 7) {
+    return 'date_format'.tr(namedArgs: {
+      'day': date.day.toString(),
+      'month': date.month.toString(),
+      'year': date.year.toString(),
+    });
+  } else if (difference.inDays > 0) {
+    return 'days_ago'.plural(difference.inDays);
+  } else if (difference.inHours > 0) {
+    return 'hours_ago'.plural(difference.inHours);
+  } else if (difference.inMinutes > 0) {
+    return 'minutes_ago'.plural(difference.inMinutes);
+  } else {
+    return 'just_now'.tr();
+  }
   }
 
   void _showClearFavoritesDialog(BuildContext context) {
@@ -333,12 +338,12 @@ class FavoriteView extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text('Clear All Favorites'),
-        content: const Text('Are you sure you want to remove all favorites?'),
+        title: Text("Clear_all_favorites".tr()),
+        content: Text("Are_you_sure_you_want_to_remove_all_favorites".tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -348,8 +353,8 @@ class FavoriteView extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
             ),
-            child: const Text(
-              'Clear All',
+            child: Text(
+              "Clear_All".tr(),
               style: TextStyle(color: Colors.white),
             ),
           ),

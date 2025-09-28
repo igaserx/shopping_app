@@ -131,7 +131,7 @@ class ProfileContent extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            FirebaseAuth.instance.currentUser!.displayName! ,
+            FirebaseAuth.instance.currentUser?.displayName! ?? "No Name",
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
